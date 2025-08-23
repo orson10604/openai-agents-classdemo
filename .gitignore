@@ -42,3 +42,8 @@ wheels/
 ehthumbs.db
 Thumbs.db
 *.env
+
+# Environment variables
+.env
+.env.*
+!.env.example
