@@ -1,4 +1,4 @@
-openai>=1.11.0
+openai-agents
 python-dotenv>=1.0.1
 pandas>=2.2.0
 numpy>=1.26.0
@@ -11,7 +11,5 @@ mysql-connector-python>=8.3.0
 googlesearch-python>=1.2.3
 anyio>=4.2.0
 # MCP 相關套件
-mcp-server>=0.1.0
-mcp-client>=0.1.0
 # RAGFlow 相關套件
 ragflow-sdk>=0.1.0
