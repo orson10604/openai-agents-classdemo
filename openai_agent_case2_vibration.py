@@ -39,12 +39,12 @@ API_KEY = os.getenv("EXAMPLE_API_KEY") or ""
 MODEL_NAME = os.getenv("EXAMPLE_MODEL_NAME") or ""
 
 #SQL connectation inf
-MYSQL_HOST = os.getenv('MYSQL_HOST', '140.134.60.218')
-MYSQL_PORT = int(os.getenv('MYSQL_PORT', '8306'))
-MYSQL_USER = os.getenv('MYSQL_USER', 'user_class')
-MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', 'password1234')
-MYSQL_DB = os.getenv('MYSQL_DB', 'phm')
-MYSQL_TABLE = os.getenv('MYSQL_TABLE', 'equipment_data')
+MYSQL_HOST = os.getenv('MYSQL_HOST')
+MYSQL_PORT = int(os.getenv('MYSQL_PORT'))
+MYSQL_USER = os.getenv('MYSQL_USER')
+MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
+MYSQL_DB = os.getenv('MYSQL_DB')
+MYSQL_TABLE = os.getenv('MYSQL_TABLE')
 
 if not BASE_URL or not API_KEY or not MODEL_NAME:
     raise ValueError(

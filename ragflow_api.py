@@ -17,7 +17,7 @@ rag_object = RAGFlow(api_key=ragflow_api_key,
 
 assistant = rag_object.list_chats(id=chat_id)
 assistant = assistant[0]
-session = assistant.create_session(name="test_session123")
+session = assistant.create_session(name="test_session1234")
 
 print(session.messages[0]['content'])
 

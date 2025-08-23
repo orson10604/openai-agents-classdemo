@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 from openai import AsyncOpenAI
 
 from openai.types.responses import ResponseTextDeltaEvent
-from agents import Agent, Runner
+from agents import Agent, handoff, Runner
 from datetime import datetime
 
 import pandas as pd
@@ -39,12 +39,12 @@ API_KEY = os.getenv("EXAMPLE_API_KEY") or ""
 MODEL_NAME = os.getenv("EXAMPLE_MODEL_NAME") or ""
 
 #SQL connectation inf
-MYSQL_HOST = os.getenv('MYSQL_HOST', '140.134.60.218')
-MYSQL_PORT = int(os.getenv('MYSQL_PORT', '8306'))
-MYSQL_USER = os.getenv('MYSQL_USER', 'user_class')
-MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', 'password1234')
-MYSQL_DB = os.getenv('MYSQL_DB', 'phm')
-MYSQL_TABLE = os.getenv('MYSQL_TABLE', 'equipment_data')
+MYSQL_HOST = os.getenv('MYSQL_HOST')
+MYSQL_PORT = int(os.getenv('MYSQL_PORT'))
+MYSQL_USER = os.getenv('MYSQL_USER')
+MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
+MYSQL_DB = os.getenv('MYSQL_DB')
+MYSQL_TABLE = os.getenv('MYSQL_TABLE')
 
 if not BASE_URL or not API_KEY or not MODEL_NAME:
     raise ValueError(
@@ -313,6 +313,8 @@ async def main():
                   [取得資料]: get_vibration_all_on_date, get_vibration_max_on_date
                   [分析資料]: analyze_vibration_list, calculate_sum
                   [解析資料]: find_vibration_outliers_on_date
+
+                  請繁體中文輸出
                   """, 
                   tools=[get_vibration_all_on_date, 
                             get_vibration_max_on_date, 
@@ -326,13 +328,14 @@ async def main():
                         你的工作是根據使用者的需求，將使用者導向適合的agent來處理。
                         使用者有時會同時有多個需求，請根據使用者的需求請依序來分配適合的agent。
                         例如，使用者想查詢天氣或電影資訊，則導向資訊人員(Web_agent)；
-                        如果使用者想查詢設備的振動數據，則導向振動工程師(Vib_agent)。
+                        如果使用者想查詢設備的振動數據，則導向振動工程師(Vib_agent),而不是google search。
+                        最後請繁體中文輸出
                         """,
-                        handoffs=[Vib_agent, Web_agent]
+                        handoffs=[Vib_agent, handoff(Web_agent)]
     )
 
     result = Runner.run_streamed(triage_agent, 
-                                input="那不可能的任務現在演到第幾集了，順便幫我查2025,7/30的振動資料分析" ,#"台中天氣如何? 請幫我查詢電影時刻，我想看電影",
+                                input="幫我查2025/7/30的振動資料分析" ,#"台中天氣如何? 請幫我查詢電影時刻，我想看電影",
                                 run_config=RunConfig(model_provider=CUSTOM_MODEL_PROVIDER))
     
     async for event in result.stream_events():
