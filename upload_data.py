@@ -5,18 +5,19 @@ import numpy as np   # 數值運算
 from datetime import datetime, timedelta  # 處理時間
 import random
 import matplotlib.pyplot as plt
-#   user="user_class",
-#   password="password1234",
-# 資料檔案路徑
-CSV_PATH = 'data/equipment_data_with_11days.csv'
 
-# MySQL 連線參數（可改從環境變數讀取）
-MYSQL_HOST = os.getenv('MYSQL_HOST', '140.134.60.218')
-MYSQL_PORT = int(os.getenv('MYSQL_PORT', '8306'))
-MYSQL_USER = os.getenv('MYSQL_USER', 'user_class')
-MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD', 'password1234')
-MYSQL_DB = os.getenv('MYSQL_DB', 'phm')  # 若不存在會自動建立
-MYSQL_TABLE = os.getenv('MYSQL_TABLE', 'equipment_data')
+from dotenv import load_dotenv
+# 資料檔案路徑
+# CSV_PATH = 'data/equipment_data_with_11days.csv'
+
+# MySQL 連線參數（可改從環境變數讀取）# 載入 .env 檔案
+load_dotenv()
+MYSQL_HOST = os.getenv('MYSQL_HOST')
+MYSQL_PORT = int(os.getenv('MYSQL_PORT'))
+MYSQL_USER = os.getenv('MYSQL_USER')
+MYSQL_PASSWORD = os.getenv('MYSQL_PASSWORD')
+MYSQL_DB = os.getenv('MYSQL_DB')  # 若不存在會自動建立
+MYSQL_TABLE = os.getenv('MYSQL_TABLE')
 
 # 讀取完整數據
 # df_loaded = pd.read_csv(CSV_PATH, parse_dates=['Time'])
@@ -79,7 +80,8 @@ def upload_dataframe(df: pd.DataFrame, db_name: str, table_name: str):
 
 if __name__ == '__main__':
 	try:
-		upload_dataframe(df_loaded, MYSQL_DB, MYSQL_TABLE)
+		ensure_database_exists(MYSQL_DB)
+		#upload_dataframe(df_loaded, MYSQL_DB, MYSQL_TABLE)
 	except Exception as e:
 		print('Upload failed:', e)
 		raise
